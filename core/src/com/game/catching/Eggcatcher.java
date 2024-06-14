@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -28,7 +30,8 @@ import java.util.Vector;
 
 public class Eggcatcher extends ApplicationAdapter {
 
-
+	Circle circleEgg;
+	Rectangle bctWolfTopLeftRectangle,bctWolfTopRightRectangle, bctWolfButtomLeftRectangle, bctWolfButtomRightRectangle;
 	TextureRegion bctWolfTopLeft, bctWolfTopRight, bctWolfButtomLeft, bctWolfButtomRight;
 	float imgWolfX, imgWolfY;
 	OrthographicCamera camera;
@@ -95,10 +98,19 @@ public class Eggcatcher extends ApplicationAdapter {
 		imgWolfX = 1120;
 		imgWolfY = 195;
 
-		bctWolfTopLeft = new TextureRegion(wolfTopLeft, 150, 200);
-		bctWolfTopRight = new TextureRegion(wolfTopRight);
-		bctWolfButtomLeft = new TextureRegion(wolfButtomLeft);
-		bctWolfButtomRight = new TextureRegion(wolfButtomRight);
+		bctWolfTopLeft = new TextureRegion(wolfTopLeft, 25, 110, 125, 35);
+		bctWolfTopRight = new TextureRegion(wolfTopRight, 370, 123, 130, 35 );
+		bctWolfButtomLeft = new TextureRegion(wolfButtomLeft, 0, 331, 146, 35);
+		bctWolfButtomRight = new TextureRegion(wolfButtomRight, 389, 326, 107, 35);
+
+		circleEgg = new Circle();
+		bctWolfTopLeftRectangle = new Rectangle();
+		bctWolfTopRightRectangle = new Rectangle();
+		bctWolfButtomLeftRectangle = new Rectangle();
+		bctWolfButtomRightRectangle = new Rectangle();
+
+
+
 
 
 
@@ -116,13 +128,28 @@ public class Eggcatcher extends ApplicationAdapter {
 		if (gamestate == 1) {
 			spawnEggs();
 
+			bctWolfTopLeftRectangle.set(0+570, 343+160, 137, 39);
+
 
 			for (int i=0; i<eggs.size; i++) {
-				eggs.get(i).move();
-				if (eggs.get(i).eggOnGround()){
-					spawnBrokenEggs(eggs.get(i));
+				Egg g = eggs.get(i);
+				g.move();
+				if (g.eggOnGround()){
+					spawnBrokenEggs(g);
 					eggs.removeIndex(i);
 				}
+				circleEgg.set(g.x + 29, g.y +29, 29);
+				if(Intersector.overlaps(circleEgg, bctWolfTopLeftRectangle) ||
+				   Intersector.overlaps(circleEgg, bctWolfTopRightRectangle) ||
+				   Intersector.overlaps(circleEgg, bctWolfButtomLeftRectangle) ||
+				   Intersector.overlaps(circleEgg, bctWolfButtomRightRectangle)){
+					eggs.removeIndex(i);
+					score++;
+				}
+
+
+
+
 
 
 			}
@@ -143,7 +170,7 @@ public class Eggcatcher extends ApplicationAdapter {
 
 			//отрисовка
 
-			batch.draw(bctWolfTopLeft, 100, 100);
+
 
 			for (Egg e: eggs) {
 				batch.draw(imgEgg,  e.getX(), e.getY(), 29, 29, 58, 58, 1, 1, e.angle);
