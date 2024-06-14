@@ -29,6 +29,8 @@ import java.util.Vector;
 public class Eggcatcher extends ApplicationAdapter {
 
 
+	TextureRegion bctWolfTopLeft, bctWolfTopRight, bctWolfButtomLeft, bctWolfButtomRight;
+	float imgWolfX, imgWolfY;
 	OrthographicCamera camera;
 	Vector3 touch;
 	BitmapFont bitmapFont;
@@ -58,6 +60,7 @@ public class Eggcatcher extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+
 		bitmapFont = new BitmapFont();
 		bitmapFont.setColor(Color.WHITE);
 		bitmapFont.getData().setScale(10);
@@ -88,6 +91,15 @@ public class Eggcatcher extends ApplicationAdapter {
 		startY=450;
 		imgBroken_eggTexture = new Texture("broken_egg.png");
 		broken_egg = new TextureRegion(imgBroken_eggTexture);
+
+		imgWolfX = 1120;
+		imgWolfY = 195;
+
+		bctWolfTopLeft = new TextureRegion(wolfTopLeft, 150, 200);
+		bctWolfTopRight = new TextureRegion(wolfTopRight);
+		bctWolfButtomLeft = new TextureRegion(wolfButtomLeft);
+		bctWolfButtomRight = new TextureRegion(wolfButtomRight);
+
 
 
 
@@ -130,10 +142,13 @@ public class Eggcatcher extends ApplicationAdapter {
 //			startY = (float) (startY-0.35);
 
 			//отрисовка
+
+			batch.draw(bctWolfTopLeft, 100, 100);
+
 			for (Egg e: eggs) {
 				batch.draw(imgEgg,  e.getX(), e.getY(), 29, 29, 58, 58, 1, 1, e.angle);
 			}
-			batch.draw(imgWolf, 1100, 500);
+			batch.draw(imgWolf, imgWolfX, imgWolfY);
 
 			for (BrokenEgg b: brokenEggs){
 				batch.draw(imgBroken_eggTexture, b.x, b.y);
@@ -144,19 +159,28 @@ public class Eggcatcher extends ApplicationAdapter {
 				camera.unproject(touch);
 
 				if(btnTopLeft.hit(touch.x, touch.y)){
+
 					imgWolf = wolfTopLeft;
+					imgWolfX = 570;
+					imgWolfY = 160;
 				}
 
 				if(btnTopRight.hit(touch.x, touch.y)){
 					imgWolf = wolfTopRight;
+					imgWolfX = 1120;
+					imgWolfY = 195;
 				}
 
 				if(btnButtomLeft.hit(touch.x, touch.y)){
 					imgWolf = wolfButtomLeft;
+					imgWolfX = 570;
+					imgWolfY = 160;
 				}
 
 				if (btnButtomRight.hit(touch.x, touch.y)){
 					imgWolf = wolfButtomRight;
+					imgWolfX = 1130;
+					imgWolfY = 160;
 				}
 			}
 
