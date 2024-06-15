@@ -30,6 +30,7 @@ import java.util.Vector;
 
 public class Eggcatcher extends ApplicationAdapter {
 
+	Texture eggCounting1, eggCounting2, eggCounting3;
 	Circle circleEgg;
 	Rectangle bctWolfTopLeftRectangle,bctWolfTopRightRectangle, bctWolfButtomLeftRectangle, bctWolfButtomRightRectangle;
 	TextureRegion bctWolfTopLeft, bctWolfTopRight, bctWolfButtomLeft, bctWolfButtomRight;
@@ -57,12 +58,18 @@ public class Eggcatcher extends ApplicationAdapter {
 	Array<Egg> eggs = new Array<>();
 	Array<BrokenEgg> brokenEggs = new Array<>();
 	Texture imgWolf;
-
+	int counter;
 	EggButton btnTopLeft, btnTopRight, btnButtomLeft, btnButtomRight;
 
 
 	@Override
 	public void create () {
+
+
+		eggCounting1 = new Texture("eggCounting1.png");
+		eggCounting2 = new Texture("eggCounting2.png");
+		eggCounting3 = new Texture("eggCounting3.png");
+		counter = 0;
 
 		bitmapFont = new BitmapFont();
 		bitmapFont.setColor(Color.WHITE);
@@ -120,23 +127,24 @@ public class Eggcatcher extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
 		batch.begin();
 		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		if (gamestate == 1) {
 			spawnEggs();
 
-			bctWolfTopLeftRectangle.set(0+570, 343+160, 137, 39);
+
 
 
 			for (int i=0; i<eggs.size; i++) {
 				Egg g = eggs.get(i);
 				g.move();
 				if (g.eggOnGround()){
-					spawnBrokenEggs(g);
 					eggs.removeIndex(i);
+					spawnBrokenEggs(g);
+					counter ++;
+
 				}
 				circleEgg.set(g.x + 29, g.y +29, 29);
 				if(Intersector.overlaps(circleEgg, bctWolfTopLeftRectangle) ||
@@ -145,13 +153,29 @@ public class Eggcatcher extends ApplicationAdapter {
 				   Intersector.overlaps(circleEgg, bctWolfButtomRightRectangle)){
 					eggs.removeIndex(i);
 					score++;
+
 				}
 
 
 
 
 
+			}
+			if(counter==1){
 
+				batch.draw(eggCounting1, 1200, 700);
+			}
+			if (counter ==2){
+
+				batch.draw(eggCounting1, 1200, 700);
+				batch.draw(eggCounting2, 1300, 700);
+			}
+			if (counter ==3){
+
+				batch.draw(eggCounting1, 1200, 700);
+				batch.draw(eggCounting2, 1300, 700);
+				batch.draw(eggCounting3, 1400, 700);
+				gamestate = 2;
 			}
 
 			btnTopLeft.font.draw(batch, btnTopLeft.text, btnTopLeft.x, btnTopLeft.y);
@@ -190,24 +214,40 @@ public class Eggcatcher extends ApplicationAdapter {
 					imgWolf = wolfTopLeft;
 					imgWolfX = 570;
 					imgWolfY = 160;
+					bctWolfTopLeftRectangle.set(0+570, 343+160, 137, 39);
+					bctWolfTopRightRectangle.set(0,0,0,0);
+					bctWolfButtomLeftRectangle.set(0,0,0,0);
+					bctWolfButtomRightRectangle.set(0,0,0,0);
 				}
 
 				if(btnTopRight.hit(touch.x, touch.y)){
 					imgWolf = wolfTopRight;
 					imgWolfX = 1120;
 					imgWolfY = 195;
+					bctWolfTopLeftRectangle.set(0,0,0,0);
+					bctWolfTopRightRectangle.set(357+1120, 340+195, 140, 24);
+					bctWolfButtomLeftRectangle.set(0,0,0,0);
+					bctWolfButtomRightRectangle.set(0,0,0,0);
 				}
 
 				if(btnButtomLeft.hit(touch.x, touch.y)){
 					imgWolf = wolfButtomLeft;
 					imgWolfX = 570;
 					imgWolfY = 160;
+					bctWolfTopLeftRectangle.set(0,0,0,0);
+					bctWolfTopRightRectangle.set(0,0,0,0);
+					bctWolfButtomLeftRectangle.set(11+570, 132+160, 147, 15);
+					bctWolfButtomRightRectangle.set(0,0,0,0);
 				}
 
 				if (btnButtomRight.hit(touch.x, touch.y)){
 					imgWolf = wolfButtomRight;
 					imgWolfX = 1130;
 					imgWolfY = 160;
+					bctWolfTopLeftRectangle.set(0, 0, 0,0);
+					bctWolfTopRightRectangle.set(0, 0, 0, 0);
+					bctWolfButtomLeftRectangle.set(0, 0, 0, 0);
+					bctWolfButtomRightRectangle.set(366+1130, 156+160, 134, 15);
 				}
 			}
 
