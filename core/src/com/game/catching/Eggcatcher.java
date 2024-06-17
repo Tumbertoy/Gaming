@@ -149,11 +149,11 @@ public class Eggcatcher extends ApplicationAdapter {
 				circleEgg.set(g.x + 29, g.y +29, 29);
 				if(Intersector.overlaps(circleEgg, bctWolfTopLeftRectangle) ||
 				   Intersector.overlaps(circleEgg, bctWolfTopRightRectangle) ||
-				   Intersector.overlaps(circleEgg, bctWolfButtomLeftRectangle) ||
-				   Intersector.overlaps(circleEgg, bctWolfButtomRightRectangle)){
+				  (Intersector.overlaps(circleEgg, bctWolfButtomLeftRectangle) &&  !g.top)||
+				  (Intersector.overlaps(circleEgg, bctWolfButtomRightRectangle) && !g.top)){
+
 					eggs.removeIndex(i);
 					score++;
-
 				}
 
 

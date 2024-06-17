@@ -4,14 +4,22 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.bullet.linearmath.SWIGTYPE_p_btAlignedObjectArrayT_btPlane_t;
 
 public class Egg extends Object{
+    Boolean top;
 
     public Egg(float x, float y){
         this.x = x;
         this.y = y;
         float a = 2;
         float v = 1;
+        this.top = false;
+        if(y>500){
+            top = true;
+        }
+
+
 
         vx = v*MathUtils.sin(a);
         vy = v*MathUtils.cos(a);
