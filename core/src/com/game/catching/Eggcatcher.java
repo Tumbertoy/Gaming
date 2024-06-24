@@ -60,13 +60,14 @@ public class Eggcatcher extends ApplicationAdapter {
 	Texture imgWolf;
 	int counter;
 	EggButton btnTopLeft, btnTopRight, btnButtomLeft, btnButtomRight;
-
+	int[][] eggsCoordinate = {{360, 445}, {1810, 450}, {360, 677}, {1810, 680}};
 
 	@Override
 	public void create () {
 
 
-		eggCounting1 = new Texture("eggCounting1.png");
+
+        eggCounting1 = new Texture("eggCounting1.png");
 		eggCounting2 = new Texture("eggCounting2.png");
 		eggCounting3 = new Texture("eggCounting3.png");
 		counter = 0;
@@ -117,12 +118,6 @@ public class Eggcatcher extends ApplicationAdapter {
 		bctWolfButtomRightRectangle = new Rectangle();
 
 
-
-
-
-
-
-
     }
 
 	@Override
@@ -147,13 +142,14 @@ public class Eggcatcher extends ApplicationAdapter {
 
 				}
 				circleEgg.set(g.x + 29, g.y +29, 29);
-				if(Intersector.overlaps(circleEgg, bctWolfTopLeftRectangle) ||
-				   Intersector.overlaps(circleEgg, bctWolfTopRightRectangle) ||
+				if((Intersector.overlaps(circleEgg, bctWolfTopLeftRectangle) && g.top)||
+				  (Intersector.overlaps(circleEgg, bctWolfTopRightRectangle) && g.top)||
 				  (Intersector.overlaps(circleEgg, bctWolfButtomLeftRectangle) &&  !g.top)||
 				  (Intersector.overlaps(circleEgg, bctWolfButtomRightRectangle) && !g.top)){
 
 					eggs.removeIndex(i);
 					score++;
+					Gdx.app.log("Score", String.valueOf(score));
 				}
 
 
@@ -182,7 +178,7 @@ public class Eggcatcher extends ApplicationAdapter {
 			btnTopRight.font.draw(batch, btnTopRight.text, btnTopRight.x, btnTopRight.y);
 			btnButtomLeft.font.draw(batch, btnButtomLeft.text, btnButtomLeft.x, btnButtomLeft.y);
 			btnButtomRight.font.draw(batch, btnButtomRight.text, btnButtomRight.x, btnButtomRight.y);
-
+			bitmapFont.draw(batch, String.valueOf(score), 1300, 1000);
 
 			///batch.draw(egg, 360,450 );   ///яичко левое нижнее начало
 			///batch.draw(egg, 585, 354);   ///яичко левое нижнее конец
@@ -203,6 +199,7 @@ public class Eggcatcher extends ApplicationAdapter {
 
 			for (BrokenEgg b: brokenEggs){
 				batch.draw(imgBroken_eggTexture, b.x, b.y);
+
 			}
 
 			if(Gdx.input.justTouched()){
@@ -263,10 +260,16 @@ public class Eggcatcher extends ApplicationAdapter {
 
 			}
 		} else if (gamestate == 2) {
-			batch.draw(gameOver, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+			batch.draw(gameOver, 900, 500);
 			if (Gdx.input.justTouched()) {
 
 				gamestate = 0;
+				eggs.clear();
+				brokenEggs.clear();
+				counter = 0;
+				score = 0;
+
+
 
 
 			}
@@ -278,6 +281,12 @@ public class Eggcatcher extends ApplicationAdapter {
 
 
 
+	}
+	@Override
+	public void dispose(){
+		imgBroken_eggTexture.dispose();
+		imgEggTexture.dispose();
+		bitmapFont.dispose();
 	}
 
 	void spawnEggs() {
@@ -295,6 +304,7 @@ public class Eggcatcher extends ApplicationAdapter {
 			timeSpawnLastEgg4 = TimeUtils.millis();
 			eggs.add(new Egg(1810, 680));
 		}
+		
 	}
 
 
